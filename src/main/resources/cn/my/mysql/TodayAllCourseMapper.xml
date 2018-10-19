@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+    namespace="com.example.demo.test.mapper.TodayAllCourseMapper">
+    <resultMap id="resultMap"
+        type="com.example.demo.test.common.TodayAllCourseResultDTO">
+        
+        <result column="TEACHING_TIME_ID"     property="teachingTimeId"       jdbcType="VARCHAR" />
+        <result column="TEACHER_ID"           property="teachingId"           jdbcType="VARCHAR" />
+        <result column="ROOM_NUM"             property="roomName"             jdbcType="VARCHAR" />
+        <result column="TEACHER_ID"           property="teacherId"            jdbcType="VARCHAR" />
+        <result column="COURSE_NAME"          property="courseName"           jdbcType="VARCHAR" />
+        <result column="COURSE_ID"            property="courseId"             jdbcType="VARCHAR" />
+        <result column="OPEN_ID"              property="openId"               jdbcType="VARCHAR" />
+        <result column="TEACHING_START_TIME"  property="teachingStartTime"    jdbcType="VARCHAR" />
+        <result column="TEACHING_END_TIME"    property="teachingEndTime"      jdbcType="VARCHAR" />
+        <result column="STUDENT_NAME"         property="studentName"          jdbcType="VARCHAR" />
+        <result column="TIME_OUT"             property="timeOut"              jdbcType="BIGINT" />
+    </resultMap>
+    <!-- 查询出所有正在上课的课程 -->
+    <select id="query" resultMap="resultMap" 
+        parameterType="com.example.demo.test.common.CourseStudentAbsentQueryDTO">
+        
+       select 
+             A.ID TEACHING_TIME_ID,
+             (a.teaching_end_time-UNIX_TIMESTAMP(now())*1000-5*60*1000) TIME_OUT
+	   from  CW_EDUCATE_TEACHING B right join CW_EDUCATE_TEACHING_TIME A 
+		     on B.ID=A.TEACHING_ID
+	</select>
+</mapper>
