@@ -7,7 +7,7 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = -2839266361445833706L;
     private String id;
     private  String name;
-    
+    private String password;
     public String getId() {
         return id;
     }
@@ -20,5 +20,10 @@ public class UserInfo implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

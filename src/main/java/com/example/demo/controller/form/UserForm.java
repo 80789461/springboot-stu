@@ -6,8 +6,12 @@ public class UserForm {
 	
 	@NotNull(message="1001")
 	private String id;
+	
 	@NotNull(message="1002")
 	private String name;
+	
+	private String password;
+	
 	public String getId() {
 		return id;
 	}
@@ -19,5 +23,11 @@ public class UserForm {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
