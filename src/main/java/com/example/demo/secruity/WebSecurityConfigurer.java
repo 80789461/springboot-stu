@@ -1,11 +1,14 @@
 package com.example.demo.secruity;
 
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,17 +45,27 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AccessDecisionManager myAccessDecisionManager;
 	
-	@Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-	
+	  @Bean
+	    public PasswordEncoder passwordEncoder() {
+	        return new PasswordEncoder() {
+	            @Override
+	            public String encode(CharSequence charSequence) {
+	                return charSequence.toString();
+	            }
+	 
+	            @Override
+	            public boolean matches(CharSequence charSequence, String s) {
+	                return Objects.equals(charSequence.toString(),s);
+	            }
+	        };
+	  }
 	@Override
 	  protected void configure(HttpSecurity http) throws Exception {
 	      http
 	      		//定义哪些url需要保护，哪些url不需要保护
 	          .authorizeRequests() 
 	              .antMatchers("/", "/message/").permitAll()    //定义不需要认证就可以访问
+	              .antMatchers("/oauth/*").permitAll()
 	              .anyRequest().authenticated().accessDecisionManager(myAccessDecisionManager)
 	              .and()
 	          .formLogin()
@@ -73,4 +86,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/**/*.html");
 	}
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		// TODO Auto-generated method stub
+		return super.authenticationManager();
+	}
+	
 }

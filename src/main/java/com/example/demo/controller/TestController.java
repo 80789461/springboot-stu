@@ -19,7 +19,7 @@ import com.example.demo.test.common.TodayAllCourseResultDTO;
 import com.example.demo.test.service.QueryService;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api")
 public class TestController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired

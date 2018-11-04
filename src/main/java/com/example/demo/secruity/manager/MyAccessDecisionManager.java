@@ -21,7 +21,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 		FilterInvocation s = (FilterInvocation) object;
 		s.getRequestUrl();
 		authentication.getName();
-		throw new AuthorizationServiceException("没有权限");
+		//throw new AuthorizationServiceException("没有权限");
 	}
 
 	@Override
