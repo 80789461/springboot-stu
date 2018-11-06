@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -14,18 +15,26 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-	private String DEMO_RESOURCE_ID = "hello";
 	
 	@Autowired
 	RedisConnectionFactory redisConnectionFactory;
-	 @Autowired
-     AuthenticationManager authenticationManager;
+	
+	@Autowired
+    AuthenticationManager authenticationManager;
+	
+	@Autowired
+	AccessDeniedHandler myAccessDeniedHandler;
+	
+	@Autowired
+	AuthenticationEntryPoint  myAuthenticationEntryPoint;
+	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		   //允许表单认证
@@ -33,6 +42,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         .realm("oauth2-resources") //code授权添加
         .tokenKeyAccess("permitAll()")
         .checkTokenAccess("isAuthenticated()") //allow check token
+        //.accessDeniedHandler(myAccessDeniedHandler)
+        .authenticationEntryPoint(myAuthenticationEntryPoint)
         .allowFormAuthenticationForClients();
 
 	}
@@ -55,8 +66,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .resourceIds("oauth2-resource")
                 .accessTokenValiditySeconds(1200)
                 .refreshTokenValiditySeconds(50000);
+        		
     }
-
-
-	
 }

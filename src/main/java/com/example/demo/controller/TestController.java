@@ -26,12 +26,11 @@ public class TestController {
 	private QueryService queryService;
 	
 	@RequestMapping(value="/index",method=RequestMethod.POST)
-	public Result<PageAble<List<TodayAllCourseResultDTO>>> teste(@RequestBody UserForm userForm) {
+	public Result<String> teste(@RequestBody UserForm userForm) {
 		
-		PageInfo pageInfo = new PageInfo(1,20);
-		CourseStudentAbsentQueryDTO dto = new CourseStudentAbsentQueryDTO();
-		return queryService.query(pageInfo, dto);
+		//PageInfo pageInfo = new PageInfo(1,20);
+		//CourseStudentAbsentQueryDTO dto = new CourseStudentAbsentQueryDTO();
+		//return queryService.query(pageInfo, dto);
+		return Result.sucess("成功");
 	}
-	
-	
 }
