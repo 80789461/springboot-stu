@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -35,6 +36,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Autowired
 	AuthenticationEntryPoint  myAuthenticationEntryPoint;
 	
+	@Autowired
+	WebResponseExceptionTranslator myWebResponseExceptionTranslator;
+	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		   //允许表单认证
@@ -42,7 +46,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         .realm("oauth2-resources") //code授权添加
         .tokenKeyAccess("permitAll()")
         .checkTokenAccess("isAuthenticated()") //allow check token
-        //.accessDeniedHandler(myAccessDeniedHandler)
+        .accessDeniedHandler(myAccessDeniedHandler)
         .authenticationEntryPoint(myAuthenticationEntryPoint)
         .allowFormAuthenticationForClients();
 
@@ -51,8 +55,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
+        
+        //.accessTokenConverter(accessTokenConverter)
         .tokenStore(new RedisTokenStore(redisConnectionFactory))
         //允许 GET、POST 请求获取 token，即访问端点：oauth/token
+        //.exceptionTranslator(myWebResponseExceptionTranslator)
+        
         .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
     }
     @Override

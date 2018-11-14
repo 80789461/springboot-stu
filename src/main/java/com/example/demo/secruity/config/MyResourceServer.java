@@ -29,6 +29,7 @@ public class MyResourceServer extends ResourceServerConfigurerAdapter {
 		 http.requestMatchers().antMatchers("/api/**")
          .and()      
          .authorizeRequests()
+         
          .antMatchers("/api/**").authenticated();
 	}
 
@@ -36,7 +37,10 @@ public class MyResourceServer extends ResourceServerConfigurerAdapter {
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		// TODO Auto-generated method stub
 		//super.configure(resources);
-		resources.accessDeniedHandler(myAccessDeniedHandler).authenticationEntryPoint(myAuthenticationEntryPoint);
-		
+		//权限异常处理器
+		resources.accessDeniedHandler(myAccessDeniedHandler)
+		//token校验
+		.authenticationEntryPoint(myAuthenticationEntryPoint)
+		;
 	}
 }

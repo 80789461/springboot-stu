@@ -89,7 +89,7 @@
                <groupId>com.alibaba</groupId>
                <artifactId>fastjson</artifactId>
                <version>${fastjson.version}</version>
-           </dependency>
+        </dependency>
         <!-- 将token存储在redis中 -->
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
